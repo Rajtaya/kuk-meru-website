@@ -48,15 +48,69 @@ document.addEventListener('DOMContentLoaded', function () {
     ];
     document.querySelectorAll(cardSelectors.join(', ')).forEach(function (card) {
         card.classList.add('clickable-card');
-        if (!card.hasAttribute('data-href')) {
+        if (!card.hasAttribute('data-href') && !card.hasAttribute('data-img')) {
             card.setAttribute('data-href', '#');
         }
         card.addEventListener('click', function (e) {
             if (e.target.closest('a')) return;
+            if (card.hasAttribute('data-img')) return;
             var href = card.getAttribute('data-href');
             if (href && href !== '#') {
                 window.open(href, '_blank');
             }
+        });
+    });
+
+    // Facility card image preview
+    var activePreview = null;
+    var activeCard = null;
+    document.querySelectorAll('.facility-item[data-img]').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+            if (e.target.closest('a')) return;
+
+            // If clicking the same card, close it
+            if (activeCard === item && activePreview) {
+                var closing = activePreview;
+                closing.classList.remove('open');
+                item.classList.remove('active');
+                activePreview = null;
+                activeCard = null;
+                setTimeout(function () { closing.remove(); }, 400);
+                return;
+            }
+
+            // Close any existing preview
+            if (activePreview) {
+                var old = activePreview;
+                old.classList.remove('open');
+                if (activeCard) activeCard.classList.remove('active');
+                activePreview = null;
+                activeCard = null;
+                setTimeout(function () { old.remove(); }, 400);
+            }
+
+            // Build new preview
+            var preview = document.createElement('div');
+            preview.className = 'facility-preview';
+            var srcs = item.getAttribute('data-img').split(',');
+            srcs.forEach(function (src) {
+                var img = document.createElement('img');
+                img.src = src.trim();
+                img.alt = item.getAttribute('data-alt') || '';
+                img.loading = 'lazy';
+                preview.appendChild(img);
+            });
+
+            // Insert after the clicked item
+            item.after(preview);
+            item.classList.add('active');
+
+            // Force layout reflow then add open class for animation
+            preview.offsetHeight;
+            preview.classList.add('open');
+
+            activePreview = preview;
+            activeCard = item;
         });
     });
 });
