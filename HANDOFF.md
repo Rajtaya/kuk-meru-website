@@ -31,44 +31,53 @@ A static, single-page website presenting the **MERU (Multidisciplinary Education
 
 ```
 kuk-meru-website/
-├── index.html              (~830 lines)    Main page with all 15 sections
-├── style.css               (~1380 lines)   Complete stylesheet
-├── script.js               (~62 lines)     Navigation, scroll animations, clickable cards
+├── index.html              (~789 lines)    Main page with all 15 sections
+├── style.css               (~1425 lines)   Complete stylesheet
+├── script.js               (~116 lines)    Navigation, scroll animations, click-to-reveal cards
 ├── naac-certificate.pdf    (150 KB)        NAAC A++ certificate (linked from hero + rankings)
 ├── nirf-2025.pdf           (229 KB)        NIRF 2025 ranking report (linked from hero + rankings)
-├── images/                                 26 campus photos extracted from PDF
+├── images/                                 36 campus photos & infographics
 │   ├── university-gate.jpg                 Hero background (cover page)
-│   ├── lab-chemistry.jpg                   Research section
-│   ├── lab-computer.jpg                    Academics section
-│   ├── lab-electronics.jpg                 Infrastructure section
-│   ├── lab-pharmacy.jpg                    Research section
-│   ├── library.jpg                         Academics section
-│   ├── training.jpg                        Academics section
-│   ├── research-equip.jpg                  Research section
-│   ├── research-lab2.jpg                   Research section
-│   ├── building-modern.jpg                 Infrastructure section
-│   ├── it-center.jpg                       Infrastructure section
-│   ├── hostel.jpg                          Campus Facilities section
-│   ├── campus-road.jpg                     Campus Facilities section
+│   ├── university-gate-new.jpg             University main gate (high-quality)
 │   ├── campus-monument.jpg                 Campus Facilities banner
-│   ├── campus-heritage.jpg                 Campus Facilities section
-│   ├── stadium.jpg                         Campus Facilities section
-│   ├── swimming-pool.jpg                   Campus Facilities section
-│   ├── dharohar.jpg                        Campus Facilities section
+│   ├── campus-heritage.jpg                 Green Audited Campus (click-to-reveal)
+│   ├── biodiversity.jpg                    Biodiversity Reserve Area (click-to-reveal)
+│   ├── water-harvesting.jpg                Water harvesting basin (click-to-reveal)
+│   ├── hostel.jpg                          25 Hostels (click-to-reveal)
+│   ├── stadium.jpg                         Stadium (click-to-reveal, paired with pool)
+│   ├── swimming-pool.jpg                   Swimming Pool (click-to-reveal, paired with stadium)
+│   ├── dharohar.jpg                        Dharohar Museum exterior (click-to-reveal)
+│   ├── dharohar-museum.jpg                 Dharohar Museum interior (click-to-reveal)
+│   ├── shooting-range.jpg                  Indoor Shooting Range (click-to-reveal)
+│   ├── guest-house.jpg                     International Guest House (click-to-reveal)
+│   ├── solar-panels.jpg                    1600 KW Solar Installation (click-to-reveal)
+│   ├── gita-event.jpg                      Int'l Gita Olympiad group photo (click-to-reveal)
+│   ├── scheme-a-framework.jpg              Scheme A Multidisciplinary Framework (click-to-reveal)
+│   ├── nep-diagram.jpg                     NEP 2020 framework diagram
+│   ├── lab-chemistry.jpg                   Research section strip
+│   ├── lab-computer.jpg                    Academics section strip
+│   ├── lab-electronics.jpg                 Infrastructure section strip
+│   ├── lab-pharmacy.jpg                    Research section strip
+│   ├── library.jpg                         Academics section strip
+│   ├── training.jpg                        Academics section strip
+│   ├── research-equip.jpg                  Research section strip
+│   ├── research-lab2.jpg                   Research section strip
+│   ├── building-modern.jpg                 Infrastructure section strip
+│   ├── it-center.jpg                       Infrastructure section strip
 │   ├── mou-signing.jpg                     Industry Collab banner
-│   ├── sports-kabaddi.jpg                  Internationalization section
-│   ├── sports-athletics.jpg                Internationalization section
-│   ├── sports-shooting.jpg                 Internationalization section
-│   ├── cultural-gita.jpg                   NEP section
-│   ├── cultural-dance.jpg                  NEP section
-│   ├── ratnavali.jpg                       NEP section
-│   └── manuscripts.jpg                     NEP section
+│   ├── sports-kabaddi.jpg                  Internationalization section strip
+│   ├── sports-athletics.jpg                Internationalization section strip
+│   ├── sports-shooting.jpg                 Internationalization section strip
+│   ├── cultural-gita.jpg                   NEP/Cultural section strip
+│   ├── cultural-dance.jpg                  NEP/Cultural section strip
+│   ├── ratnavali.jpg                       NEP/Cultural section strip
+│   └── manuscripts.jpg                     NEP/Cultural section strip
 ├── HANDOFF.md              (this file)
 └── .claude/
     └── launch.json                         Dev server config
 ```
 
-**Total Size:** ~1.7 MB (including images and PDFs)
+**Total Size:** ~2.6 MB images + ~100 KB code + ~380 KB PDFs
 
 ---
 
@@ -231,10 +240,13 @@ Uses CSS Grid, Flexbox, `backdrop-filter`, CSS custom properties, `IntersectionO
 - **Alternating section themes** (light/dark/accent/gradient)
 - **Hover effects** on all interactive cards
 - **Clickable cards** with hover arrow indicator (66 cards across all sections)
-- **Inline highlight links** for key terms (37 links with dashed-underline hover effect)
+- **Click-to-reveal images** on facility and info cards (10 cards with inline image previews)
+- **Inline highlight links** for key terms (37+ links with dashed-underline hover effect)
 - **Real PDF links** - NAAC certificate and NIRF 2025 report open in new tabs
-- **Campus photos** - 26 images extracted from PDF, placed in relevant sections
+- **Campus photos** - 36 images (properly cropped from PDF + high-quality originals)
 - **Section image strips** with responsive grid and hover zoom
+- **NEP 2020 framework diagram** in the NEP Implementation section
+- **Scheme A infographic** revealed on clicking Multidisciplinary Programmes card
 - **Theme-aware styling** for links/arrows on light, dark, accent, and gradient backgrounds
 - **Zero JavaScript frameworks** - fast load, no FOUC
 - **SVG icons** - no icon library dependency
@@ -242,9 +254,47 @@ Uses CSS Grid, Flexbox, `backdrop-filter`, CSS custom properties, `IntersectionO
 
 ---
 
-## 11. Clickable Links & Hover Highlights
+## 11. Click-to-Reveal Cards
 
-### Real Links (from PDF)
+Cards with `data-img` attribute show an image inline below the card when clicked. Clicking again toggles it off. Clicking a different card auto-closes the previous.
+
+### Campus Facilities Section (10 cards)
+
+| Card                        | Image(s)                                   |
+|-----------------------------|--------------------------------------------|
+| 25 Hostels (6,200 students) | `hostel.jpg`                              |
+| Astro-turf & Shooting Range | `shooting-range.jpg`                      |
+| Stadium & Swimming Pool     | `stadium.jpg` + `swimming-pool.jpg` (side-by-side) |
+| Guest House & Community Centre | `guest-house.jpg`                      |
+| 1600 KW Solar Installation  | `solar-panels.jpg`                        |
+| 35 Water Harvesting Systems | `water-harvesting.jpg`                     |
+| Biodiversity Reserve Area   | `biodiversity.jpg`                         |
+| Green Audited Campus        | `campus-heritage.jpg`                      |
+| Dharohar Museum & Ratnavali | `dharohar.jpg` + `dharohar-museum.jpg` (side-by-side) |
+| International Gita Olympiad | `gita-event.jpg`                           |
+
+### Academics Section (1 card)
+
+| Card                        | Image                                      |
+|-----------------------------|--------------------------------------------|
+| Multidisciplinary Programmes | `scheme-a-framework.jpg`                  |
+
+### How to Add Click-to-Reveal to Any Card
+
+Add `data-img` and `data-alt` attributes to any card element:
+```html
+<div class="info-card" data-img="images/photo.jpg" data-alt="Description">
+```
+For multiple images side-by-side, comma-separate the paths:
+```html
+<div class="facility-item" data-img="images/a.jpg,images/b.jpg" data-alt="Description">
+```
+
+---
+
+## 12. Clickable Links & Hover Highlights
+
+### Real Links
 
 | Element                        | Destination                                |
 |-------------------------------|--------------------------------------------|
@@ -254,6 +304,8 @@ Uses CSS Grid, Flexbox, `backdrop-filter`, CSS custom properties, `IntersectionO
 | Rankings: NIRF #35 card       | `nirf-2025.pdf` (opens in new tab)         |
 | Infrastructure: LMS link      | `https://kuk.ac.in/lms/`                   |
 | Research: policies link        | `https://kuk.ac.in/policies`               |
+| Internships card              | `https://www.kukonline.ac.in/internship`   |
+| Internships inline link       | `https://www.kukonline.ac.in/internship`   |
 | Footer: www.kuk.ac.in         | `https://www.kuk.ac.in`                    |
 
 ### Dummy Links (placeholder `#`)
@@ -267,10 +319,12 @@ All other highlight links (NEP 2020, IKS, NCrF, NHEQF, KUTIC, KUKAA, BOAT, KUCTI
 
 ---
 
-## 12. Future Enhancements (if needed)
+## 13. Future Enhancements (if needed)
 
 - Add university logo image (replace the "KU" text logo)
 - Replace dummy `#` links with real URLs as they become available
+- Add images for remaining facility cards (Health Centre, KG to PG Scheme)
+- Add smart classroom and auditorium images to Infrastructure section
 - Add a PDF download button linking to the original report
 - Add language toggle (Hindi/English)
 - Connect to a CMS for dynamic content updates
@@ -280,7 +334,7 @@ All other highlight links (NEP 2020, IKS, NCrF, NHEQF, KUTIC, KUKAA, BOAT, KUCTI
 
 ---
 
-## 13. Content Accuracy
+## 14. Content Accuracy
 
 All data in the website is sourced directly from `FINAL MERU_KKR.pdf` (31 pages). Key data points were cross-verified across sections. The content covers:
 
@@ -300,7 +354,7 @@ All data in the website is sourced directly from `FINAL MERU_KKR.pdf` (31 pages)
 
 ---
 
-## 14. Contact
+## 15. Contact
 
 **Developer:** Aarya
 **Email:** Rajtaya@kuk.ac.in
