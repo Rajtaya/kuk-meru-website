@@ -1073,12 +1073,12 @@ ul {
     color: var(--gray-800);
 }
 
-.facility-item[data-img] {
+[data-img] {
     cursor: pointer;
 }
 
-.facility-item[data-img].active {
-    border-color: var(--orange);
+[data-img].active {
+    border-color: var(--orange) !important;
     box-shadow: var(--shadow-md);
 }
 

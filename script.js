@@ -61,10 +61,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Facility card image preview
+    // Card image preview (facility cards, info cards, etc.)
     var activePreview = null;
     var activeCard = null;
-    document.querySelectorAll('.facility-item[data-img]').forEach(function (item) {
+    document.querySelectorAll('[data-img]').forEach(function (item) {
         item.addEventListener('click', function (e) {
             if (e.target.closest('a')) return;
 
