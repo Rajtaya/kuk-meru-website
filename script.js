@@ -39,4 +39,24 @@ document.addEventListener('DOMContentLoaded', function () {
         '.animate-on-scroll { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }' +
         '.animate-on-scroll.visible { opacity: 1; transform: translateY(0); }';
     document.head.appendChild(style);
+
+    var cardSelectors = [
+        '.vm-card', '.stat-card', '.info-card', '.infra-card',
+        '.skill-card', '.collab-card', '.intl-card',
+        '.entre-card-large', '.entre-card-small',
+        '.rank-card', '.inclusive-card', '.nep-card', '.facility-item'
+    ];
+    document.querySelectorAll(cardSelectors.join(', ')).forEach(function (card) {
+        card.classList.add('clickable-card');
+        if (!card.hasAttribute('data-href')) {
+            card.setAttribute('data-href', '#');
+        }
+        card.addEventListener('click', function (e) {
+            if (e.target.closest('a')) return;
+            var href = card.getAttribute('data-href');
+            if (href && href !== '#') {
+                window.open(href, '_blank');
+            }
+        });
+    });
 });

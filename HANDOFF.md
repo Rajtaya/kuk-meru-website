@@ -169,6 +169,13 @@ Since this is a pure static site with zero build step, it can be deployed to:
 
 No `.env`, no build commands, no node_modules required.
 
+### Current Deployment
+
+| Resource        | URL                                                      |
+|-----------------|----------------------------------------------------------|
+| **Live Site**   | https://kukmeru.up.railway.app                           |
+| **GitHub Repo** | https://github.com/Rajtaya/kuk-meru-website              |
+
 ---
 
 ## 9. Browser Support

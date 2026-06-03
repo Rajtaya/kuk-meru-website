@@ -1160,6 +1160,94 @@ ul {
     color: rgba(255,255,255,0.3);
 }
 
+/* ===== CLICKABLE CARDS & HIGHLIGHT LINKS ===== */
+.clickable-card {
+    cursor: pointer;
+    position: relative;
+}
+
+.clickable-card::after {
+    content: '→';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.clickable-card:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.section-light .clickable-card::after { color: var(--orange); }
+.section-dark .clickable-card::after,
+.section-gradient .clickable-card::after { color: var(--orange-light); }
+.section-accent .clickable-card::after { color: rgba(255,255,255,0.8); }
+
+.facility-item.clickable-card::after {
+    top: 50%;
+    transform: translateX(-8px) translateY(-50%);
+}
+.facility-item.clickable-card:hover::after {
+    transform: translateX(0) translateY(-50%);
+}
+
+.highlight-link {
+    color: var(--orange);
+    font-weight: 600;
+    border-bottom: 1.5px dashed rgba(232, 117, 26, 0.4);
+    padding-bottom: 1px;
+    transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+    cursor: pointer;
+}
+
+.highlight-link:hover {
+    color: var(--orange-dark);
+    border-bottom-color: var(--orange-dark);
+    border-bottom-style: solid;
+    background: rgba(232, 117, 26, 0.08);
+    border-radius: 2px;
+}
+
+.section-dark .highlight-link,
+.section-gradient .highlight-link {
+    color: var(--orange-light);
+    border-bottom-color: rgba(245, 166, 35, 0.4);
+}
+
+.section-dark .highlight-link:hover,
+.section-gradient .highlight-link:hover {
+    color: white;
+    border-bottom-color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.section-accent .highlight-link {
+    color: white;
+    border-bottom-color: rgba(255,255,255,0.5);
+}
+
+.section-accent .highlight-link:hover {
+    color: white;
+    border-bottom-color: white;
+    background: rgba(255,255,255,0.15);
+}
+
+a.hero-tag {
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+a.hero-tag:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.35);
+    transform: translateY(-2px);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
