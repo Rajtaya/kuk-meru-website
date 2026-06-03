@@ -1,6 +1,6 @@
 # Project Handoff: KUK MERU Status Report Website
 
-**Date:** 2 June 2026
+**Date:** 3 June 2026
 **Author:** Aarya (Rajtaya@kuk.ac.in)
 **Status:** Complete - Ready for Deployment
 
@@ -31,15 +31,44 @@ A static, single-page website presenting the **MERU (Multidisciplinary Education
 
 ```
 kuk-meru-website/
-├── index.html        (758 lines, 40 KB)   Main page with all 13 sections
-├── style.css         (1235 lines, 28 KB)  Complete stylesheet
-├── script.js         (42 lines, 4 KB)     Navigation + scroll animations
-├── HANDOFF.md        (this file)
+├── index.html              (~830 lines)    Main page with all 15 sections
+├── style.css               (~1380 lines)   Complete stylesheet
+├── script.js               (~62 lines)     Navigation, scroll animations, clickable cards
+├── naac-certificate.pdf    (150 KB)        NAAC A++ certificate (linked from hero + rankings)
+├── nirf-2025.pdf           (229 KB)        NIRF 2025 ranking report (linked from hero + rankings)
+├── images/                                 26 campus photos extracted from PDF
+│   ├── university-gate.jpg                 Hero background (cover page)
+│   ├── lab-chemistry.jpg                   Research section
+│   ├── lab-computer.jpg                    Academics section
+│   ├── lab-electronics.jpg                 Infrastructure section
+│   ├── lab-pharmacy.jpg                    Research section
+│   ├── library.jpg                         Academics section
+│   ├── training.jpg                        Academics section
+│   ├── research-equip.jpg                  Research section
+│   ├── research-lab2.jpg                   Research section
+│   ├── building-modern.jpg                 Infrastructure section
+│   ├── it-center.jpg                       Infrastructure section
+│   ├── hostel.jpg                          Campus Facilities section
+│   ├── campus-road.jpg                     Campus Facilities section
+│   ├── campus-monument.jpg                 Campus Facilities banner
+│   ├── campus-heritage.jpg                 Campus Facilities section
+│   ├── stadium.jpg                         Campus Facilities section
+│   ├── swimming-pool.jpg                   Campus Facilities section
+│   ├── dharohar.jpg                        Campus Facilities section
+│   ├── mou-signing.jpg                     Industry Collab banner
+│   ├── sports-kabaddi.jpg                  Internationalization section
+│   ├── sports-athletics.jpg                Internationalization section
+│   ├── sports-shooting.jpg                 Internationalization section
+│   ├── cultural-gita.jpg                   NEP section
+│   ├── cultural-dance.jpg                  NEP section
+│   ├── ratnavali.jpg                       NEP section
+│   └── manuscripts.jpg                     NEP section
+├── HANDOFF.md              (this file)
 └── .claude/
     └── launch.json                         Dev server config
 ```
 
-**Total Size:** ~76 KB (excluding this handoff file)
+**Total Size:** ~1.7 MB (including images and PDFs)
 
 ---
 
@@ -160,7 +189,7 @@ Since this is a pure static site with zero build step, it can be deployed to:
 
 | Platform        | Method                                        |
 |-----------------|-----------------------------------------------|
-| **Any Web Server** | Copy all 3 files (index.html, style.css, script.js) to the server root |
+| **Any Web Server** | Copy all files + `images/` folder to the server root |
 | **GitHub Pages** | Push to a repo, enable Pages from Settings    |
 | **Netlify**      | Drag and drop the folder                      |
 | **Vercel**       | `vercel deploy` from the directory            |
@@ -201,16 +230,47 @@ Uses CSS Grid, Flexbox, `backdrop-filter`, CSS custom properties, `IntersectionO
 - **Hamburger menu** on mobile
 - **Alternating section themes** (light/dark/accent/gradient)
 - **Hover effects** on all interactive cards
+- **Clickable cards** with hover arrow indicator (66 cards across all sections)
+- **Inline highlight links** for key terms (37 links with dashed-underline hover effect)
+- **Real PDF links** - NAAC certificate and NIRF 2025 report open in new tabs
+- **Campus photos** - 26 images extracted from PDF, placed in relevant sections
+- **Section image strips** with responsive grid and hover zoom
+- **Theme-aware styling** for links/arrows on light, dark, accent, and gradient backgrounds
 - **Zero JavaScript frameworks** - fast load, no FOUC
 - **SVG icons** - no icon library dependency
 - **Google Fonts** loaded asynchronously with `font-display: swap`
 
 ---
 
-## 11. Future Enhancements (if needed)
+## 11. Clickable Links & Hover Highlights
+
+### Real Links (from PDF)
+
+| Element                        | Destination                                |
+|-------------------------------|--------------------------------------------|
+| Hero tag: NAAC A++            | `naac-certificate.pdf` (opens in new tab)  |
+| Hero tag: NIRF Rank 35       | `nirf-2025.pdf` (opens in new tab)         |
+| Rankings: NAAC A++ card       | `naac-certificate.pdf` (opens in new tab)  |
+| Rankings: NIRF #35 card       | `nirf-2025.pdf` (opens in new tab)         |
+| Infrastructure: LMS link      | `https://kuk.ac.in/lms/`                   |
+| Research: policies link        | `https://kuk.ac.in/policies`               |
+| Footer: www.kuk.ac.in         | `https://www.kuk.ac.in`                    |
+
+### Dummy Links (placeholder `#`)
+
+All other highlight links (NEP 2020, IKS, NCrF, NHEQF, KUTIC, KUKAA, BOAT, KUCTIE, ICCASH, WSRC, SWAYAM, IDP 2025, etc.) currently point to `#`. Replace with real URLs when available.
+
+### How to Add Real Links
+
+1. **Inline links**: Search for `class="highlight-link"` in `index.html` and replace `href="#"` with the real URL
+2. **Card links**: Add `data-href="https://..."` attribute to any card element; the JS click handler will open it in a new tab
+
+---
+
+## 12. Future Enhancements (if needed)
 
 - Add university logo image (replace the "KU" text logo)
-- Add campus photo gallery using images from the PDF
+- Replace dummy `#` links with real URLs as they become available
 - Add a PDF download button linking to the original report
 - Add language toggle (Hindi/English)
 - Connect to a CMS for dynamic content updates
@@ -220,7 +280,7 @@ Uses CSS Grid, Flexbox, `backdrop-filter`, CSS custom properties, `IntersectionO
 
 ---
 
-## 12. Content Accuracy
+## 13. Content Accuracy
 
 All data in the website is sourced directly from `FINAL MERU_KKR.pdf` (31 pages). Key data points were cross-verified across sections. The content covers:
 
@@ -240,7 +300,7 @@ All data in the website is sourced directly from `FINAL MERU_KKR.pdf` (31 pages)
 
 ---
 
-## 13. Contact
+## 14. Contact
 
 **Developer:** Aarya
 **Email:** Rajtaya@kuk.ac.in
