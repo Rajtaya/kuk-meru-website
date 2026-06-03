@@ -1160,6 +1160,70 @@ ul {
     color: rgba(255,255,255,0.3);
 }
 
+/* ===== SECTION IMAGES ===== */
+.section-image-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 48px;
+}
+
+.section-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.section-img:hover {
+    transform: scale(1.03);
+    box-shadow: var(--shadow-lg);
+}
+
+.section-dark .section-img,
+.section-gradient .section-img {
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.section-accent .section-img {
+    border: 2px solid rgba(255,255,255,0.25);
+}
+
+.section-light .section-img {
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+}
+
+.section-light .section-img:hover {
+    border-color: var(--orange);
+}
+
+.hero-bg-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .section-image-strip {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 32px;
+    }
+    .section-img { height: 140px; }
+}
+
+@media (max-width: 480px) {
+    .section-image-strip {
+        grid-template-columns: 1fr 1fr;
+    }
+    .section-img { height: 120px; }
+}
+
 /* ===== CLICKABLE CARDS & HIGHLIGHT LINKS ===== */
 .clickable-card {
     cursor: pointer;
