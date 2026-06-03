@@ -1,0 +1,7 @@
+{
+  "name": "kuk-meru-website",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npx serve -s . -l $PORT"
+  }
+}
