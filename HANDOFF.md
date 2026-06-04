@@ -273,6 +273,12 @@ Cards with `data-img` attribute show an image inline below the card when clicked
 | Dharohar Museum & Ratnavali | `dharohar.jpg` + `dharohar-museum.jpg` (side-by-side) |
 | International Gita Olympiad | `gita-event.jpg`                           |
 
+### Infrastructure Section (1 card)
+
+| Card                        | Image                                      |
+|-----------------------------|--------------------------------------------|
+| 343 Smart Classrooms        | `smart-classroom.jpg`                      |
+
 ### Academics Section (1 card)
 
 | Card                        | Image                                      |
@@ -306,6 +312,8 @@ For multiple images side-by-side, comma-separate the paths:
 | Research: policies link        | `https://kuk.ac.in/policies`               |
 | Internships card              | `https://www.kukonline.ac.in/internship`   |
 | Internships inline link       | `https://www.kukonline.ac.in/internship`   |
+| Skilling: 7 Skill Centres    | `https://sdc.rusakuk.in/`                  |
+| Entrepreneurship: CIC heading | `kutic-incubated-startups.pdf` (opens in new tab) |
 | Footer: www.kuk.ac.in         | `https://www.kuk.ac.in`                    |
 
 ### Dummy Links (placeholder `#`)
