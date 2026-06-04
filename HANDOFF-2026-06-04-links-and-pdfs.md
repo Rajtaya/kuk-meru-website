@@ -14,6 +14,8 @@ This session wired up real destinations for previously dead links, and added sev
 
 A follow-up session added more document links (patent status, international students, chairs, publications, apprenticeships, support to women, Goyal Prize images) and updated the foreign student count from 178 to 196.
 
+A second follow-up session added IKS courses PDF (branded, generated from xlsx), smart classroom image, NEP 2020 and IDP 2025 external links, and made the Publications and Patents stat cards in University Highlights clickable. The Smart Classrooms card uses a direct `<a>` tag (not `data-href`) to avoid popup-blocker issues with image URLs.
+
 All edits were made to `index.html` only (plus new files added to the repo). No CSS or JS changes were required — the styling and click behaviour already existed in `style.css` and `script.js`.
 
 ---
@@ -22,9 +24,9 @@ All edits were made to `index.html` only (plus new files added to the repo). No 
 
 | Element / Section | Destination | Mechanism |
 |---|---|---|
-| **Patents Granted** stat (University Highlights) | `https://kuk.ac.in/patents/` | `data-href` on `.stat-card` |
+| **Patents Granted** stat (University Highlights) | `kuk-patent-status.pdf` (local) | `data-href` on `.stat-card` |
 | **Library Books** stat (Research Facilities) | `https://kuk.ac.in/library-page/` | inline `<a class="highlight-link">` |
-| **Publications (2024-25)** stat | `https://kuk.ac.in/wp-content/uploads/2025/01/3.4.6-Supp-Doc.-2023-24_compressed.pdf` | **NOT applied — see §6** |
+| **Publications (2024-25)** stat (University Highlights) | `faculty-publications.pdf` (local) | `data-href` on `.stat-card` |
 | **Integrated University Management System (IUMS)** (Digital Infrastructure) | `https://iums.kuk.ac.in/login.htm` | inline `<a class="highlight-link">` |
 | **KUKAA** inline word (Alumni Cell card) | `https://kukaa.kuk.ac.in/` | inline `<a class="highlight-link">` |
 | **Alumni Cell (KUKAA)** whole card | `https://kukaa.kuk.ac.in/` | `data-href` on `.collab-card` |
@@ -48,6 +50,11 @@ All edits were made to `index.html` only (plus new files added to the repo). No 
 | **Goyal Prizes** inline word (Research section) | `images/goyal-prize-1.jpg` | inline `<a class="highlight-link">` |
 | **Apprenticeships** whole card (Industry Connect) | `apprenticeship-boat.pdf` (local) | `data-href` on `.collab-card` |
 | **AEDP Programmes** whole card (Skilling Ecosystem) | `apprenticeship-boat.pdf` (local) | `data-href` on `.skill-card` |
+| **Smart Classrooms** stat (University Highlights) | `images/smart-classroom.jpg` | inline `<a>` wrapper (avoids popup blocker) |
+| **IKS** inline word (Indian Knowledge System card) | `iks-courses.pdf` (local) | inline `<a class="highlight-link">` |
+| **Indian Knowledge System** whole card (NEP section) | `iks-courses.pdf` (local) | `data-href` on `.info-card` |
+| **NEP 2020** inline word (Multidisciplinary section) | `https://kuk.ac.in/national-education-policy/` | inline `<a class="highlight-link">` |
+| **IDP 2025** inline word (NEP Implementation) | `https://kuk.ac.in/institutional-development-plan/` | inline `<a class="highlight-link">` |
 
 All external links and document links open in a new tab via `target="_blank" rel="noopener noreferrer"` (inline anchors) or `window.open(href, '_blank')` (card `data-href`, handled by `script.js`).
 
@@ -66,7 +73,9 @@ All external links and document links open in a new tab via `target="_blank" rel
 | `list-of-chairs.pdf` | `list of chair.docx` (converted via pandoc) | Wheelchairs link |
 | `support-to-women.pdf` | `7.1.1-Part-3-2022-23-Upload.pdf` (renamed) | Support to Women card |
 | `apprenticeship-boat.pdf` | `ABCD.pdf` (renamed) | Apprenticeships + AEDP cards |
-| `faculty-publications.pdf` | `KUK Faculty Publication List - (2022-2025) Form 17.pdf` (renamed) | Publications (2024-25) |
+| `faculty-publications.pdf` | `Faculty Publication.pdf` (183 pages, 11MB) | Publications (2024-25) stat + Research label |
+| `iks-courses.pdf` | `ODL IKS AEDP-KUK Form3.xlsx` (converted via reportlab, branded) | IKS inline link + IKS card |
+| `images/smart-classroom.jpg` | `smartclassroom.png` (converted to JPEG, compressed to 222KB) | Smart Classrooms stat card |
 | `images/goyal-prize-1.jpg` | `1 GP.JPG` (compressed from 12MB to 350KB) | Goyal Prizes & Goyal Peace Prize |
 | `images/goyal-prize-2.jpg` | `_DSC0389.JPG` (compressed) | Available in repo |
 | `images/goyal-prize-3.jpg` | `_DSC0535.JPG` (compressed) | Available in repo |
@@ -128,12 +137,13 @@ If a future card uses a class **not** in this list, `data-href` alone won't work
 
 ## 7. Open items / not done
 
-- ~~**Publications (2024-25) stat link**~~ — **DONE.** Now links to `faculty-publications.pdf` (local, converted from faculty publication list xlsx).
+- ~~**Publications (2024-25) stat link**~~ — **DONE.** Stat card + Research label both link to `faculty-publications.pdf` (183 pages, 11MB).
 - **Unused source spreadsheets** — `kuk-mou-list.xlsx` and `kutic-incubated-startups.xlsx` may still be tracked in git after the switch to PDF. Harmless but redundant. To remove: `git rm kuk-mou-list.xlsx kutic-incubated-startups.xlsx && git commit -m "Remove unused xlsx" && git push`. Confirm with `git ls-files | grep xlsx`.
 - **Laptops card target** — the Laptops for Academics card currently points to `computers-academic.pdf`, which is a *desktop/computer* count table (totals 2,986, matching the Desktops stat). It fits the Desktops card precisely; it is a looser fit for Laptops. Repoint later if a laptop-specific document becomes available.
 - **Goyal Prize images** — `goyal-prize-2.jpg` and `goyal-prize-3.jpg` are in the repo but not yet linked from the HTML. They could be added as an image strip or gallery in the Goyal sections if needed.
-- **faculty-publications.pdf is 33MB** — works but is large. Consider compressing it or hosting on a CDN for faster loading.
-- **Verify the live PDFs** — after deploy, click-test every document link (patents, publications, international students, chairs, support-to-women, apprenticeship-boat, MoU, startups, NCrF/NHEQF, Pool-of-SEC, computers-academic, Goyal images). Broken file paths 404 silently; the HTML can look correct while the file is missing from the repo. Confirm files are committed with `git ls-files | grep -E 'pdf|jpg'`.
+- **IKS PDF Hindi text** — `iks-courses.pdf` (generated via reportlab) renders Hindi/Devanagari text as blocks due to missing font embedding. Replace with a Devanagari-capable font if Hindi readability is needed.
+- **Popup blocker note** — the Smart Classrooms card uses a direct `<a>` tag instead of `data-href` because `window.open()` for image URLs gets blocked by some browsers. If other image-linked cards have the same issue, use the same `<a>` wrapper pattern.
+- **Verify the live PDFs** — after deploy, click-test every document link (patents, publications, international students, chairs, support-to-women, apprenticeship-boat, iks-courses, MoU, startups, NCrF/NHEQF, Pool-of-SEC, computers-academic, Goyal images, smart-classroom). Broken file paths 404 silently. Confirm files are committed with `git ls-files | grep -E 'pdf|jpg'`.
 
 ---
 
