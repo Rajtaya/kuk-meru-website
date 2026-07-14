@@ -1,7 +1,19 @@
 {
   "name": "kuk-meru-website",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "description": "KUK MERU status site — public page, login-gated watermarked PDF viewer.",
   "scripts": {
-    "start": "npx serve -s . -l $PORT"
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.65",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "pdfjs-dist": "^4.8.69"
   }
 }
