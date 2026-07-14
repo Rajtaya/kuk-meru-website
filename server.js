@@ -17,7 +17,13 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { createCanvas } = require('@napi-rs/canvas');
+const canvasLib = require('@napi-rs/canvas');
+const { createCanvas } = canvasLib;
+// pdfjs renders against browser globals (Path2D, DOMMatrix, …) that Node lacks.
+// @napi-rs/canvas provides them — expose on globalThis before any page render.
+['Path2D', 'DOMMatrix', 'ImageData', 'DOMPoint', 'DOMRect'].forEach(function (g) {
+    if (canvasLib[g] && !globalThis[g]) globalThis[g] = canvasLib[g];
+});
 
 const ROOT = __dirname;
 const PORT = process.env.PORT || 4700;
@@ -204,7 +210,7 @@ app.get('/api/doc/:name/page/:n', requireAuth, async (req, res) => {
         res.send(buf);
     } catch (e) {
         console.error('render error', name, n, e);
-        res.status(500).json({ error: 'Could not render page.', detail: String(e && e.stack || e).slice(0, 400) });
+        res.status(500).json({ error: 'Could not render page.' });
     }
 });
 
