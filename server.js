@@ -24,6 +24,14 @@ const { createCanvas } = canvasLib;
 ['Path2D', 'DOMMatrix', 'ImageData', 'DOMPoint', 'DOMRect'].forEach(function (g) {
     if (canvasLib[g] && !globalThis[g]) globalThis[g] = canvasLib[g];
 });
+// Register a bundled font so watermark text renders even on font-less containers
+// (Railway has no system fonts, so ctx.fillText would silently draw nothing).
+try {
+    canvasLib.GlobalFonts.registerFromPath(path.join(__dirname, 'fonts', 'watermark.ttf'), 'WM');
+    canvasLib.GlobalFonts.registerFromPath(path.join(__dirname, 'fonts', 'watermark-bold.ttf'), 'WMBold');
+} catch (e) {
+    console.warn('[warn] could not register watermark font:', e && e.message);
+}
 
 const ROOT = __dirname;
 const PORT = process.env.PORT || 4700;
@@ -167,9 +175,9 @@ function stampWatermark(ctx, w, h, email) {
     const big = Math.max(16, Math.round(w / 26));
     for (let y = -h; y < h * 2; y += step) {
         for (let x = -w; x < w * 2; x += step * 1.6) {
-            ctx.font = `bold ${big}px sans-serif`;
+            ctx.font = `${big}px WMBold`;
             ctx.fillText(line1, x, y);
-            ctx.font = `${Math.round(big * 0.6)}px sans-serif`;
+            ctx.font = `${Math.round(big * 0.6)}px WM`;
             ctx.fillText(line2, x, y + big * 0.95);
         }
     }
