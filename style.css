@@ -5,6 +5,22 @@
     box-sizing: border-box;
 }
 
+/* ===== CONTENT-COPY DETERRENT ===== */
+/* Disables text selection + native image-save. Paired with protect.js.
+   Note: this is a deterrent, not real protection (see protect.js header). */
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none; /* stops the iOS long-press "Copy / Save Image" menu */
+}
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    pointer-events: auto;
+}
+
 :root {
     --orange: #E8751A;
     --orange-dark: #C4600F;
