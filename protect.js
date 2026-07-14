@@ -42,19 +42,8 @@
         }
     });
 
-    // 5. Block the common "inspect / view-source" keyboard shortcuts.
-    //    (F12, Ctrl/Cmd+U, Ctrl/Cmd+S, Ctrl/Cmd+Shift+I/J/C)
-    document.addEventListener('keydown', function (e) {
-        var k = (e.key || '').toLowerCase();
-        var mod = e.ctrlKey || e.metaKey;
-        if (
-            e.key === 'F12' ||
-            (mod && k === 'u') ||
-            (mod && k === 's') ||
-            (mod && e.shiftKey && (k === 'i' || k === 'j' || k === 'c'))
-        ) {
-            e.preventDefault();
-            return false;
-        }
-    });
+    // NOTE: We intentionally do NOT block keyboard shortcuts (F12, Ctrl+U,
+    // Ctrl+S, Ctrl+Shift+I/J/C). They annoy honest users (can't save the
+    // page, can't use the browser normally) while doing nothing to stop a
+    // real copier, who can open DevTools from the browser menu regardless.
 })();
