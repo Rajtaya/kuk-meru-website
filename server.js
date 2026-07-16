@@ -218,7 +218,7 @@ app.get('/api/doc/:name/page/:n', requireAuth, async (req, res) => {
         res.send(buf);
     } catch (e) {
         console.error('render error', name, n, e);
-        res.status(500).json({ error: 'Could not render page.' });
+        res.status(500).json({ error: 'Could not render page.', detail: String(e && e.stack || e).slice(0, 500) });
     }
 });
 
