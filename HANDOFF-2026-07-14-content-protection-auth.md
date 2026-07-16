@@ -116,8 +116,9 @@ Rotate the JWT secret (logs everyone out once):
 
 1. **`Path2D is not defined`** — pdfjs's canvas renderer needs browser globals (`Path2D`, `DOMMatrix`, …) that Node lacks. Fixed by assigning them from `@napi-rs/canvas` onto `globalThis` at the top of `server.js`.
 2. **Invisible watermark on Railway** — the container has **no system fonts**, so `ctx.fillText` silently drew nothing (PDF body text still rendered because pdfjs handles its own fonts). Fixed by bundling Liberation Sans under `fonts/` and registering it via `GlobalFonts.registerFromPath(..., 'WM'/'WMBold')`, then using those families in `stampWatermark`.
+3. **`process.getBuiltinModule is not a function` on PDFs with inline images** (e.g. `ncrf-deans-minutes.pdf` — all pages 500'd). pdfjs's internal `NodeCanvasFactory` creates auxiliary canvases (for inline image XObjects) using `process.getBuiltinModule()`, an API absent on Railway's Node runtime. Fixed by passing a custom `CanvasFactory` **class** (backed by `@napi-rs/canvas`) to `getDocument`. Note: the option is `CanvasFactory` (capital C, a class that pdfjs instantiates) — the lowercase `canvasFactory` instance is **not** read by pdfjs 4.10. PDFs without inline images (e.g. the patent table) never hit this path, which is why only some documents failed.
 
-Locally on macOS both were fine (mac provides `Path2D` + fonts), so **always test rendering against the live Railway deploy**, not just local.
+Locally on macOS all three were fine (mac provides `Path2D`, fonts, and a Node with `getBuiltinModule`), so **always test rendering against the live Railway deploy**, not just local. A quick full sweep: sign up, then GET `/api/doc/<name>.pdf/page/1.jpg` for every doc and check for 200.
 
 ---
 
