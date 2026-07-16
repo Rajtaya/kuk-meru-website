@@ -27,15 +27,18 @@
         '  <div class="pdfv-body">',
         // Auth panel
         '    <div class="pdfv-auth">',
-        '      <h3 class="pdfv-auth-title">Sign in to view this document</h3>',
+        '      <div class="pdfv-tabs">',
+        '        <button class="pdfv-tab pdfv-tab-signup" type="button">Create account</button>',
+        '        <button class="pdfv-tab pdfv-tab-login" type="button">Sign in</button>',
+        '      </div>',
+        '      <h3 class="pdfv-auth-title">Create your free account</h3>',
         '      <p class="pdfv-auth-sub">University documents require a free account.</p>',
         '      <form class="pdfv-form">',
         '        <input class="pdfv-email" type="email" placeholder="Email address" autocomplete="email" required>',
-        '        <input class="pdfv-pass" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password" required>',
+        '        <input class="pdfv-pass" type="password" placeholder="Password (min 6 characters)" autocomplete="new-password" required>',
         '        <div class="pdfv-error" hidden></div>',
-        '        <button class="pdfv-submit" type="submit">Sign in</button>',
+        '        <button class="pdfv-submit" type="submit">Create account &amp; view</button>',
         '      </form>',
-        '      <p class="pdfv-toggle-line"><span class="pdfv-toggle-text">New here?</span> <a href="#" class="pdfv-toggle">Create an account</a></p>',
         '    </div>',
         // Viewer panel
         '    <div class="pdfv-viewer" hidden>',
@@ -52,7 +55,7 @@
     document.addEventListener('DOMContentLoaded', function () { document.body.appendChild(overlay); });
 
     var $ = function (sel) { return overlay.querySelector(sel); };
-    var mode = 'login'; // or 'signup'
+    var mode = 'signup'; // or 'login'
 
     // ---- Helpers ------------------------------------------------------------
     function api(path, opts) {
@@ -62,11 +65,14 @@
     function showError(msg) { var e = $('.pdfv-error'); e.textContent = msg; e.hidden = !msg; }
     function setMode(m) {
         mode = m;
-        $('.pdfv-auth-title').textContent = m === 'signup' ? 'Create your account' : 'Sign in to view this document';
-        $('.pdfv-submit').textContent = m === 'signup' ? 'Create account & view' : 'Sign in';
-        $('.pdfv-toggle-text').textContent = m === 'signup' ? 'Already have an account?' : 'New here?';
-        $('.pdfv-toggle').textContent = m === 'signup' ? 'Sign in' : 'Create an account';
-        $('.pdfv-pass').setAttribute('autocomplete', m === 'signup' ? 'new-password' : 'current-password');
+        var signup = m === 'signup';
+        $('.pdfv-auth-title').textContent = signup ? 'Create your free account' : 'Sign in to view this document';
+        $('.pdfv-auth-sub').textContent = signup ? 'University documents require a free account.' : 'Welcome back — sign in to continue.';
+        $('.pdfv-submit').textContent = signup ? 'Create account & view' : 'Sign in';
+        $('.pdfv-pass').setAttribute('autocomplete', signup ? 'new-password' : 'current-password');
+        $('.pdfv-pass').setAttribute('placeholder', signup ? 'Password (min 6 characters)' : 'Password');
+        $('.pdfv-tab-signup').classList.toggle('active', signup);
+        $('.pdfv-tab-login').classList.toggle('active', !signup);
         showError('');
     }
     function openModal() { overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -87,7 +93,7 @@
         api('/api/auth/me').then(function (r) {
             setUser(r.data.email);
             if (r.data.email) { loadInfoAndShow(); }
-            else { setMode('login'); showAuth(); $('.pdfv-email').focus(); }
+            else { setMode('signup'); showAuth(); $('.pdfv-email').focus(); }
         });
     }
     function loadInfoAndShow() {
@@ -120,7 +126,8 @@
         $('.pdfv-close').addEventListener('click', closeModal);
         $('.pdfv-prev').addEventListener('click', function () { if (state.page > 1) { state.page--; renderPage(); } });
         $('.pdfv-next').addEventListener('click', function () { if (state.page < state.pages) { state.page++; renderPage(); } });
-        $('.pdfv-toggle').addEventListener('click', function (e) { e.preventDefault(); setMode(mode === 'login' ? 'signup' : 'login'); });
+        $('.pdfv-tab-signup').addEventListener('click', function () { setMode('signup'); });
+        $('.pdfv-tab-login').addEventListener('click', function () { setMode('login'); });
         $('.pdfv-logout').addEventListener('click', function () {
             api('/api/auth/logout', { method: 'POST' }).then(function () { setUser(null); setMode('login'); showAuth(); });
         });
@@ -134,7 +141,19 @@
             api(ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email, password: password }) })
                 .then(function (r) {
                     $('.pdfv-submit').disabled = false;
-                    if (!r.ok) { showError(r.data.error || 'Something went wrong.'); return; }
+                    if (!r.ok) {
+                        // If they tried to register an existing email, flip to Sign in and keep the email.
+                        if (mode === 'signup' && r.status === 409) {
+                            setMode('login');
+                            $('.pdfv-email').value = email;
+                            $('.pdfv-pass').value = '';
+                            $('.pdfv-pass').focus();
+                            showError('That email is already registered — please sign in.');
+                            return;
+                        }
+                        showError(r.data.error || 'Something went wrong.');
+                        return;
+                    }
                     setUser(r.data.email);
                     loadInfoAndShow();
                 });
