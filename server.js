@@ -144,6 +144,26 @@ async function getPdfjs() {
     if (!pdfjs) pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
     return pdfjs;
 }
+
+// Custom canvas factory backed by @napi-rs/canvas. Without this, pdfjs uses its
+// own NodeCanvasFactory, which calls process.getBuiltinModule() — an API missing
+// on older Node runtimes (e.g. Railway's) — and crashes on PDFs with inline
+// images. Providing our own factory makes rendering Node-version-independent.
+const canvasFactory = {
+    create(width, height) {
+        const canvas = createCanvas(Math.max(1, Math.ceil(width)), Math.max(1, Math.ceil(height)));
+        return { canvas, context: canvas.getContext('2d') };
+    },
+    reset(cc, width, height) {
+        cc.canvas.width = Math.max(1, Math.ceil(width));
+        cc.canvas.height = Math.max(1, Math.ceil(height));
+    },
+    destroy(cc) {
+        if (cc.canvas) { cc.canvas.width = 0; cc.canvas.height = 0; }
+        cc.canvas = null;
+        cc.context = null;
+    },
+};
 const pdfDocCache = new Map();           // name -> loaded pdfjs document (page count / pages)
 async function loadPdf(name) {
     if (pdfDocCache.has(name)) return pdfDocCache.get(name);
@@ -154,6 +174,7 @@ async function loadPdf(name) {
         useSystemFonts: true,
         isEvalSupported: false,
         standardFontDataUrl: path.join(ROOT, 'node_modules/pdfjs-dist/standard_fonts/'),
+        canvasFactory,
     }).promise;
     pdfDocCache.set(name, doc);
     return doc;
@@ -210,7 +231,7 @@ app.get('/api/doc/:name/page/:n', requireAuth, async (req, res) => {
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        await page.render({ canvasContext: ctx, viewport }).promise;
+        await page.render({ canvasContext: ctx, viewport, canvasFactory }).promise;
         stampWatermark(ctx, canvas.width, canvas.height, req.user.email);
         const buf = await canvas.encode('jpeg', 82);
         res.set('Content-Type', 'image/jpeg');
