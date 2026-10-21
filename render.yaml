@@ -1,0 +1,18 @@
+# Render Blueprint — KUK MERU status site (Node/Express)
+# Free web service. NOTE: the free tier has no persistent disk, so registered
+# user accounts (DATA_DIR/users.json) are reset whenever the instance restarts
+# or redeploys. For durable accounts, move to a paid plan with a disk, or back
+# to Railway (which had a /data volume).
+services:
+  - type: web
+    name: kuk-meru-website
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true   # Render generates once and keeps it stable across deploys
